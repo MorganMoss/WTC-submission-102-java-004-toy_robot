@@ -3,7 +3,7 @@ package za.co.wethinkcode.toyrobot;
 import za.co.wethinkcode.toyrobot.world.IWorld;
 
 /**
- * ForwardCommand class source code
+ * ReplayCommand class source code
  * 
  * @author Morgan Moss
  * @version 1.0
@@ -13,16 +13,16 @@ import za.co.wethinkcode.toyrobot.world.IWorld;
 /**
  * A command that moves the robot forward
  */
-public class ForwardCommand extends Command {
-    public ForwardCommand(){super("forward");}
+public class BackCommand extends Command {
+    public BackCommand(){super("back");}
 
-    /**
-     * @param steps : The distance the robot moves forward
+   /**
+     * @param steps : The distance the robot moves back
      */
-    public ForwardCommand(String steps){super("forward", steps);}
-    
+    public BackCommand(String steps){super("back", steps);}
+        
     /**
-     * Moves target forward in the direction
+     * Moves target backward in the direction
      * its facing by the amount of steps given
      */
     @Override
@@ -30,9 +30,9 @@ public class ForwardCommand extends Command {
         target.addToHistory(this);
         int steps = Integer.parseInt(getArgument());
 
-        switch (world.updatePosition(steps)){
+        switch (world.updatePosition(-steps)){
             case FAILED_OBSTRUCTED:
-                target.setStatus("Moved forward by "+steps+" steps.");
+                target.setStatus("Moved back by "+steps+" steps.");
                 break;
             case FAILED_OUTSIDE_WORLD:
                 target.setStatus("Sorry, I cannot go outside my safe zone.");

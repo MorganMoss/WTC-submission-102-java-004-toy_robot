@@ -1,13 +1,26 @@
 package za.co.wethinkcode.toyrobot;
 
-public class HelpCommand extends Command {
+import za.co.wethinkcode.toyrobot.world.IWorld;
 
-    public HelpCommand() {
-        super("help");
-    }
+/**
+ * HelpCommand class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
 
+/**
+ * A command that prints a list of all the possible commands.
+ */
+public class HelpCommand extends Command {                                                              
+    public HelpCommand(){super("help");}
+
+    /**
+     * Prints a list of applicable commands
+     */
     @Override
-    public boolean execute(Robot target) {
+    public boolean execute(Robot target, IWorld world) {
         target.setStatus("I can understand these commands:\n" +
                 "OFF  - Shut down robot\n" +
                 "HELP - provide information about commands\n" +
@@ -15,3 +28,4 @@ public class HelpCommand extends Command {
         return true;
     }
 }
+

@@ -31,12 +31,13 @@ public interface Obstacle {
      */
     boolean blocksPosition(Position position);
 
+    
     /**
-     * Checks if this obstacle blocks the path that goes from coordinate (x1, y1) to (x2, y2).
+     * Checks if this maze has at least one obstacle that blocks the path that goes from coordinate (x1, y1) to (x2, y2).
      * Since our robot can only move in horizontal or vertical lines (no diagonals yet), we can assume that either x1==x2 or y1==y2.
      * @param a first position
      * @param b second position
-     * @return `true` if this obstacle is in the way
+     * @return `true` if there is an obstacle is in the way
      */
     boolean blocksPath(Position a, Position b);
 }

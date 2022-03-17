@@ -1,6 +1,7 @@
 package za.co.wethinkcode.toyrobot.world;
 
 import za.co.wethinkcode.toyrobot.Position;
+import za.co.wethinkcode.toyrobot.Direction;
 
 import java.util.List;
 
@@ -8,12 +9,13 @@ import java.util.List;
  * Your Text and Turtle worlds must implement this interface.
  */
 public interface IWorld {
-    /**
-     * Enum used to track direction
-     */
-    enum Direction {
-        UP, RIGHT, DOWN, LEFT
-    }
+    // /**
+    //  * Enum used to track direction
+    //  */
+    // enum Direction {
+    //     UP, RIGHT, DOWN, LEFT
+    // }
+
 
     /**
      * Enum that indicates response for updatePosition request
@@ -55,7 +57,7 @@ public interface IWorld {
      * @param position the position to check
      * @return true if it is allowed, else false
      */
-    boolean isNewPositionAllowed(Position position);
+    UpdateResponse isNewPositionAllowed(Position position);
 
     /**
      * Checks if the robot is at one of the edges of the world

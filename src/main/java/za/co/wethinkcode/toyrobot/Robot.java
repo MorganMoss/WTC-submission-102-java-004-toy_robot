@@ -1,69 +1,76 @@
 package za.co.wethinkcode.toyrobot;
 
-import java.util.Arrays;
+/**
+ * Robot class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
+
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Defines a robot, that can move around on a 2D plane
+ * (And solve mazes)
+ */
 public class Robot {
-    private final Position TOP_LEFT = new Position(-200,100);
-    private final Position BOTTOM_RIGHT = new Position(100,-200);
+    // to delete later
+    public static Position CENTRE = new Position(0,0);
 
-    public static final Position CENTRE = new Position(0,0);
 
-    private Position position;
+    private final String name;
+
+    private Position position;                                                                          
     private Direction currentDirection;
     private String status;
-    private String name;
+
+    protected List<Command> history;
+    
 
     public Robot(String name) {
         this.name = name;
         this.status = "Ready";
-        this.position = CENTRE;
+        this.position = new Position(0,0);                                                                         
         this.currentDirection = Direction.NORTH;
+        this.history = new ArrayList<>();
     }
 
-    public String getStatus() {
-        return this.status;
+
+    public String getName(){return this.name;}
+
+    
+    public String getStatus(){return this.status;}
+    
+
+    public Position getPosition(){return this.position;}
+
+
+    public Direction getCurrentDirection(){return this.currentDirection;}
+
+
+    public void setStatus(String status){this.status = status;}
+    
+
+    public void setCurrentDirection(Direction direction){
+        this.currentDirection = direction;
     }
 
-    public Direction getCurrentDirection() {
-        return this.currentDirection;
-    }
 
-    public boolean handleCommand(Command command) {
-        return command.execute(this);
-    }
+    public void addToHistory(Command command){this.history.add(command);}
 
-    public boolean updatePosition(int nrSteps){
-        int newX = this.position.getX();
-        int newY = this.position.getY();
 
-        if (Direction.NORTH.equals(this.currentDirection)) {
-            newY = newY + nrSteps;
-        }
+    // public boolean handleCommand(Command command){return command.execute(this, new TextWorld(null));}
 
-        Position newPosition = new Position(newX, newY);
-        if (newPosition.isIn(TOP_LEFT,BOTTOM_RIGHT)){
-            this.position = newPosition;
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public String toString() {
-       return "[" + this.position.getX() + "," + this.position.getY() + "] "
+       return "[" + this.position.getX() + "," + this.position.getY() + "] "                            
                + this.name + "> " + this.status;
     }
 
-    public Position getPosition() {
-        return this.position;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
-    public String getName() {
-        return name;
-    }
+    
 }

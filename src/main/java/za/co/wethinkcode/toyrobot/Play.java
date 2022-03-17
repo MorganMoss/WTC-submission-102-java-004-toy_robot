@@ -1,43 +1,85 @@
 package za.co.wethinkcode.toyrobot;
 
+/**
+ * Play class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
+
 import java.util.Scanner;
 
+import za.co.wethinkcode.toyrobot.maze.EmptyMaze;
+import za.co.wethinkcode.toyrobot.maze.Maze;
+import za.co.wethinkcode.toyrobot.world.IWorld;
+import za.co.wethinkcode.toyrobot.world.TextWorld;
+
+/**
+ * Start the program from here using main
+ */
 public class Play {
-    static Scanner scanner;
+    final Scanner scanner;
+    final Robot robot;
+    final IWorld world;
 
-    public static void main(String[] args) {
-        scanner = new Scanner(System.in);
-        Robot robot;
+    public Play(Maze maze){
+        this.scanner = new Scanner(System.in);
+        this.robot = new Robot(getInput("What do you want to name your robot?"));
+        this.world = new TextWorld(maze);
+    }
 
-        String name = getInput("What do you want to name your robot?");
-        robot = new Robot(name);
-        System.out.println("Hello Kiddo!");
 
+    public void run(){
+        System.out.println("Hello Kiddo!"); 
         System.out.println(robot.toString());
 
-        Command command;
-        boolean shouldContinue = true;
+        String instruction;
         do {
-            String instruction = getInput(robot.getName() + "> What must I do next?").strip().toLowerCase();
+            instruction = getInput(robot.getName() + "> What must I do next?").strip().toLowerCase();
             try {
-                command = Command.create(instruction);
-                shouldContinue = robot.handleCommand(command);
+                if (!(Command.create(instruction).execute(robot, world))) break;
             } catch (IllegalArgumentException e) {
                 robot.setStatus("Sorry, I did not understand '" + instruction + "'.");
             }
             System.out.println(robot);
-        } while (shouldContinue);
-
+        } while (true);
+        System.out.println(robot);
     }
-
-    private static String getInput(String prompt) {
+    
+    
+    private String getInput(String prompt) {
         System.out.println(prompt);
         String input = scanner.nextLine();
-
-        while (input.isBlank()) {
-            System.out.println(prompt);
-            input = scanner.nextLine();
+        if (input.isBlank()){
+            return getInput(prompt);
         }
         return input;
+    }
+
+
+    public static void main(String[] args) {
+        // final Robot robot = new Robot(getInput("What do you want to name your robot?"));
+        
+        Maze maze = new EmptyMaze();
+        
+        for (String arg : args)
+            if (arg.matches("(.*)(EmptyMaze(?i))(.*)")){
+                maze = new EmptyMaze();
+                System.out.println("Loaded EmptyMaze");
+                break;
+            }
+        
+        Object world = new TextWorld(maze);
+
+        for (String arg : args)
+            if (arg.matches("(.*)(Text(?i))(.*)")){
+                world = new TextWorld(maze);
+                System.out.println("Loaded TextWorld");
+                break;
+            }
+        
+
+        new Play(maze).run();
     }
 }

@@ -40,10 +40,9 @@ class CommandTest {
 
     @Test
     void getHelpName() {
-        Command test = new HelpCommand();                                                               //<1>
+        HelpCommand test = new HelpCommand();                                                               
         assertEquals("help", test.getName());
     }
-
     @Test
     void executeHelp() {
         Robot robot = new Robot("CrashTestDummy");
@@ -53,6 +52,105 @@ class CommandTest {
                 "OFF  - Shut down robot\n" +
                 "HELP - provide information about commands\n" +
                 "FORWARD - move forward by specified number of steps, e.g. 'FORWARD 10'", robot.getStatus());
+    }
+
+
+    @Test
+    void getLeftName() {
+        Command test = new LeftCommand();
+        assertEquals("left", test.getName());
+    }
+    @Test
+    void executeLeft() {
+        Command test = Command.create("left");
+        Robot robot = new Robot("CrashTestDummy");
+        assertTrue(test.execute(robot));
+        assertEquals("Turned left.", robot.getStatus());
+        assertEquals(Direction.WEST, robot.getCurrentDirection());
+    }
+    
+
+    @Test
+    void getRightName() {
+        Command test = new RightCommand();
+        assertEquals("right", test.getName());
+    }
+    @Test
+    void executeRight() {
+        Command test = Command.create("right");
+        Robot robot = new Robot("CrashTestDummy");
+        assertTrue(test.execute(robot));
+        assertEquals("Turned right.", robot.getStatus());
+        assertEquals(Direction.EAST, robot.getCurrentDirection());
+    }
+
+
+
+
+
+    @Test
+    void getbackName() {
+        Command test = new BackCommand("100");
+        assertEquals("back", test.getName());
+        assertEquals("100", test.getArgument());
+    }
+    @Test
+    void executeback() {
+        Robot robot = new Robot("CrashTestDummy");
+        Command Back10 = Command.create("back 10");
+        assertTrue(Back10.execute(robot));
+        Position expectedPosition = new Position(
+            Robot.CENTRE.getX(),
+            Robot.CENTRE.getY() - 10
+        );
+        assertEquals(expectedPosition, robot.getPosition());
+        assertEquals("Moved back by 10 steps.", robot.getStatus());
+    }
+
+
+    @Test
+    void getSprintName() {
+        Command test = new SprintCommand("100");
+        assertEquals("sprint", test.getName());
+        assertEquals("100", test.getArgument());
+    }
+    @Test
+    void executeSprint() {
+        Robot robot = new Robot("CrashTestDummy");
+        Command sprint5 = Command.create("sprint 5");
+        assertTrue(sprint5.execute(robot));
+        Position expectedPosition = new Position(
+            Robot.CENTRE.getX(),
+            Robot.CENTRE.getY() + 15
+        );
+        assertEquals(expectedPosition, robot.getPosition());
+        assertEquals("Moved forward by 1 steps.", robot.getStatus());
+    }
+
+    @Test
+    void getReplayName() {
+        Command test = new ReplayCommand("");
+        assertEquals("replay", test.getName());
+        assertEquals("", test.getArgument());
+    }
+    @Test
+    void executeReplay() {
+        Robot robot = new Robot("CrashTestDummy");
+        Command replay = Command.create("replay");
+        Command.create("forward 10").execute(robot);
+        Command.create("left").execute(robot);
+        Command.create("back 2").execute(robot);
+        Command.create("right").execute(robot);
+        Command.create("sprint 2").execute(robot);
+
+        assertTrue(replay.execute(robot));
+
+        Position expectedPosition = new Position(
+            Robot.CENTRE.getX() + 4,
+            Robot.CENTRE.getY() + 26
+        );
+        assertEquals(expectedPosition, robot.getPosition());
+        assertEquals("replayed 5 commands.", robot.getStatus());
     }
 
     @Test
