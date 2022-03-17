@@ -1,7 +1,7 @@
 package za.co.wethinkcode.toyrobot.maze;
 
-import za.co.wethinkcode.toyrobot.Direction;
-import za.co.wethinkcode.toyrobot.Robot;
+import za.co.wethinkcode.toyrobot.obstacle.Robot;
+import za.co.wethinkcode.toyrobot.position.Direction;
 
 /**
  * Interface to represent a maze. A World will be loaded with a Maze, and will delegate the work to check if a path is blocked by certain obstacles etc to this maze instance.

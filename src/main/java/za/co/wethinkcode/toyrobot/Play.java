@@ -10,27 +10,41 @@ package za.co.wethinkcode.toyrobot;
 
 import java.util.Scanner;
 
+import za.co.wethinkcode.toyrobot.command.Command;
 import za.co.wethinkcode.toyrobot.maze.EmptyMaze;
 import za.co.wethinkcode.toyrobot.maze.Maze;
-import za.co.wethinkcode.toyrobot.world.IWorld;
+import za.co.wethinkcode.toyrobot.obstacle.Robot;
+import za.co.wethinkcode.toyrobot.world.World;
 import za.co.wethinkcode.toyrobot.world.TextWorld;
 
 /**
  * Start the program from here using main
  */
 public class Play {
-    final Scanner scanner;
-    final Robot robot;
-    final IWorld world;
-
-    public Play(Maze maze){
-        this.scanner = new Scanner(System.in);
-        this.robot = new Robot(getInput("What do you want to name your robot?"));
-        this.world = new TextWorld(maze);
+    final static Scanner scanner = new Scanner(System.in);
+    
+    
+    private static String getInput(String prompt) {
+        System.out.println(prompt);
+        String input = scanner.nextLine();
+        if (input.isBlank()){
+            return getInput(prompt);
+        }
+        return input;
     }
 
 
-    public void run(){
+    public static boolean has(String[] args, String word){
+        for (String arg : args)
+            if (arg.matches("(.*)(" + word + "(?i))(.*)")){
+                return true;
+            }
+        return false;
+    }   
+
+
+    public static void run(World world){
+        Robot robot = new Robot(getInput("What do you want to name your robot?"));
         System.out.println("Hello Kiddo!"); 
         System.out.println(robot.toString());
 
@@ -46,40 +60,26 @@ public class Play {
         } while (true);
         System.out.println(robot);
     }
-    
-    
-    private String getInput(String prompt) {
-        System.out.println(prompt);
-        String input = scanner.nextLine();
-        if (input.isBlank()){
-            return getInput(prompt);
-        }
-        return input;
-    }
 
-
+    
     public static void main(String[] args) {
-        // final Robot robot = new Robot(getInput("What do you want to name your robot?"));
+        final World world;
+        final Maze maze;
         
-        Maze maze = new EmptyMaze();
+        if (has(args, "EmptyMaze")){
+            maze = new EmptyMaze();
+            System.out.println("Loaded EmptyMaze");
+        } else {
+            maze = new EmptyMaze();
+        }
         
-        for (String arg : args)
-            if (arg.matches("(.*)(EmptyMaze(?i))(.*)")){
-                maze = new EmptyMaze();
-                System.out.println("Loaded EmptyMaze");
-                break;
-            }
-        
-        Object world = new TextWorld(maze);
+        if (has(args, "Text")){
+            world = new TextWorld(maze);
+            System.out.println("Loaded EmptyMaze");
+        } else {
+            world = new TextWorld(maze);
+        }
 
-        for (String arg : args)
-            if (arg.matches("(.*)(Text(?i))(.*)")){
-                world = new TextWorld(maze);
-                System.out.println("Loaded TextWorld");
-                break;
-            }
-        
-
-        new Play(maze).run();
+        run(world);
     }
 }

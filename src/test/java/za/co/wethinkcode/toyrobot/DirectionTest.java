@@ -2,6 +2,8 @@ package za.co.wethinkcode.toyrobot;
 
 import org.junit.jupiter.api.Test;
 
+import za.co.wethinkcode.toyrobot.position.Direction;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DirectionTest {

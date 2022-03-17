@@ -2,39 +2,22 @@ package za.co.wethinkcode.toyrobot.world;
 
 import java.util.List;
 
-import za.co.wethinkcode.toyrobot.Position;
-
+import za.co.wethinkcode.toyrobot.position.Coordinate;
+import za.co.wethinkcode.toyrobot.obstacle.Obstacle;
+import za.co.wethinkcode.toyrobot.obstacle.RectangleObstacle;
+import za.co.wethinkcode.toyrobot.obstacle.MovableObstacle;
 import za.co.wethinkcode.toyrobot.maze.Maze;
-import za.co.wethinkcode.toyrobot.Direction;
 
-public class TextWorld implements IWorld {
-    private final Maze maze;
+public class TextWorld implements World {
+    private final Obstacle bounds;
     private final List<Obstacle> obstacles;
-    
-    private final MovableEntity robot;
 
 
     public TextWorld(Maze maze) {
-        this.maze = maze;
+        this.bounds = new RectangleObstacle(BOTTOM_LEFT, TOP_RIGHT);
         this.obstacles = maze.getObstacles();
-        this.robot = new MovableEntity(CENTRE, Direction.NORTH) ;
     }
 
-
-    @Override
-    public void reset() {
-        robot.moveTo(CENTRE);
-    }
-
-    @Override
-    public Position getPosition() {
-        return robot.getPosition();
-    }
-
-    @Override
-    public Direction getCurrentDirection() {
-        return robot.getDirection();
-    }
 
     @Override
     public List<Obstacle> getObstacles() {
@@ -43,61 +26,37 @@ public class TextWorld implements IWorld {
 
 
     @Override
-    public void showObstacles() {
+    public void showObstacles() { 
+        for (Obstacle obstacle : obstacles){
+            System.out.println(obstacle);
+        }
     }
 
 
     @Override
-    public boolean isAtEdge() {
-        return false;
+    public boolean isAtEdge(MovableObstacle robot) {
+        int x = robot.getBottomLeftCoordinate().getX();
+        int y = robot.getBottomLeftCoordinate().getY();
+        return (bounds.getBottomLeftCoordinate().getX() == x) 
+            || (bounds.getBottomLeftCoordinate().getY() == y)
+            || (bounds.getTopRightCoordinate().getX() == x)
+            || (bounds.getTopRightCoordinate().getY() == y);
     }
     
 
-    private boolean isOutOfBounds(Position position){
-        return false;
-    }
-
-
     @Override
-    public boolean isNewPositionAllowed(Position position) {
-        if (isOutOfBounds(position)){
-            return false;
+    public UpdateResponse isNewPositionAllowed(MovableObstacle robot, Coordinate position) {
+        if (!bounds.blocksCoordinate(position)){
+            return UpdateResponse.FAILED_OUTSIDE_WORLD;
         }
 
         for (Obstacle obstacle : obstacles){
-            if (obstacle.blocksPath(this.getPosition(), position)){
-                return false;
+            if ((obstacle.blocksPath(robot.getBottomLeftCoordinate(), position)) 
+                || obstacle.blocksPath(robot.getTopRightCoordinate(), position)){
+                return UpdateResponse.FAILED_OBSTRUCTED;
             }
         }
 
-        return true;
+        return UpdateResponse.SUCCESS;
     }
-
-    
-    @Override
-    public UpdateResponse updatePosition(int steps) {
-        final Position newPosition = new Position(
-            this.robot.getPosition().getX() + steps * robot.getDirection().getX(),
-            this.robot.getPosition().getY() + steps * robot.getDirection().getY());
-
-        if (isNewPositionAllowed(newPosition)){
-            this.robot.moveTo(newPosition);
-            return UpdateResponse.SUCCESS;
-        }
-
-        if (isOutOfBounds(newPosition))
-            return UpdateResponse.FAILED_OUTSIDE_WORLD;
-        return UpdateResponse.FAILED_OBSTRUCTED;
-    }
-
-
-    @Override
-    public void updateDirection(boolean turnRight) {
-        if (turnRight) robot.turnTo(Direction.right(robot.getDirection()));
-        else robot.turnTo(Direction.left(robot.getDirection()));
-    }
-
-
-
-
 }
