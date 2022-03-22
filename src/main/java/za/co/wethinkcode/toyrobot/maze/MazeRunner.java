@@ -1,7 +1,7 @@
 package za.co.wethinkcode.toyrobot.maze;
 
-import za.co.wethinkcode.toyrobot.obstacle.Robot;
-import za.co.wethinkcode.toyrobot.position.Direction;
+import za.co.wethinkcode.toyrobot.Robot;
+import za.co.wethinkcode.toyrobot.world.IWorld;
 
 /**
  * Interface to represent a maze. A World will be loaded with a Maze, and will delegate the work to check if a path is blocked by certain obstacles etc to this maze instance.
@@ -13,7 +13,7 @@ public interface MazeRunner {
      * @param edgeDirection the edge to try and reach, one of Direction.UP, RIGHT, DOWN, or LEFT
      * @return true if it was successful
      */
-    boolean mazeRun(Robot target, Direction edgeDirection);
+    boolean mazeRun(Robot target, IWorld.Direction edgeDirection);
 
     /**
      * Returns the cost for the previous mazerun attempt:
