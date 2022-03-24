@@ -7,10 +7,7 @@ import za.co.wethinkcode.toyrobot.Position;
 
 public abstract class AbstractWorld implements IWorld {
     private final Maze maze;
-
-    protected static Position BOTTOM_LEFT = new Position(-100, -200);
-    protected static Position TOP_RIGHT = new Position(100, 200);
-
+    
     protected final Obstacle bounds;
     
     protected List<Obstacle> obstacles;

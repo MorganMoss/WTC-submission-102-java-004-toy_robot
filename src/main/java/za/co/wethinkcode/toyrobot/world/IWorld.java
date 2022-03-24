@@ -93,6 +93,8 @@ public interface IWorld {
         }
     }
 
+    Position BOTTOM_LEFT = new Position(-100, -200);
+    Position TOP_RIGHT = new Position(100, 200);
     Position CENTRE = new Position(0,0);
 
     /**

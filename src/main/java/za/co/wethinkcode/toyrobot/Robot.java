@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import za.co.wethinkcode.toyrobot.world.IWorld;
+import za.co.wethinkcode.toyrobot.world.Obstacle;
 import za.co.wethinkcode.toyrobot.world.IWorld.UpdateResponse;
 
 public class Robot {
@@ -79,6 +80,11 @@ public class Robot {
     public String toString() {
         return "[" + world.getPosition().getX() + "," + world.getPosition().getY() + "] "
             + this.name + "> " + this.status.getMessage();
+    }
+
+
+    public List<Obstacle> getObstacles(){
+        return this.world.getObstacles();
     }
 
 }

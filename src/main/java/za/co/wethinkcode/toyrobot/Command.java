@@ -1,7 +1,5 @@
 package za.co.wethinkcode.toyrobot;
 
-import za.co.wethinkcode.toyrobot.world.MazerunCommand;
-
 /**
  * Command class source code
  * 

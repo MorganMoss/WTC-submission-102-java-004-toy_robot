@@ -4,7 +4,7 @@ import za.co.wethinkcode.toyrobot.Robot;
 import za.co.wethinkcode.toyrobot.world.IWorld;
 
 /**
- * Interface to represent a maze. A World will be loaded with a Maze, and will delegate the work to check if a path is blocked by certain obstacles etc to this maze instance.
+ * Interface to represent a maze runner. It will solve a maze loaded into a world.
  */
 public interface MazeRunner {
     /**
