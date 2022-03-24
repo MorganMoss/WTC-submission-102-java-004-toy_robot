@@ -75,7 +75,7 @@ public class Play {
             System.out.println(robot);
         } while (robot.getStatus() != IWorld.UpdateResponse.SHUTDOWN);
         
-        System.exit(0);
+        // System.exit(0);
     }
 
     private static String getInput(String prompt) {

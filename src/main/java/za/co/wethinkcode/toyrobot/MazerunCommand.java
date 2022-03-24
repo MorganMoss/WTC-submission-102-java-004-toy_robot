@@ -1,5 +1,6 @@
 package za.co.wethinkcode.toyrobot;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -270,15 +271,17 @@ public class MazerunCommand extends Command implements MazeRunner {
             case "left" :
                 edge = Direction.LEFT;
                 break;
-            case "top" :
+                case "top" :
                 edge = Direction.UP;
                 break;
-            case "" :
+                case "" :
                 edge = Direction.UP;
                 break;
-            default:
+                default:
                 throw new IllegalArgumentException("Unsupported command.");
         }
+
+        target.reset();
 
         if (mazeRun(target, edge)){
             UpdateResponse status = UpdateResponse.SOLVED;

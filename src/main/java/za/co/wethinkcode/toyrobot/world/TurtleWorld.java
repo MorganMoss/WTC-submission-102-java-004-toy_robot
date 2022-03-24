@@ -56,7 +56,7 @@ public class TurtleWorld extends AbstractWorld{
     private void drawObstacle(Obstacle obstacle){
         StdDraw.setPenRadius(0.002);
         
-        StdDraw.setPenColor(Color.RED);
+        StdDraw.setPenColor(Color.DARK_GRAY);
         StdDraw.filledSquare(
             obstacle.getBottomLeftX()*scale,
             obstacle.getBottomLeftY()*scale,
@@ -72,10 +72,6 @@ public class TurtleWorld extends AbstractWorld{
     
 
     private void drawBounds() {
-        // StdDraw.setXscale(-200,200);
-        // StdDraw.setYscale(-200,200);
-        // StdDraw.disableDoubleBuffering();
-        
         StdDraw.setPenRadius(0.005);
         StdDraw.setPenColor(Color.BLACK);
 
@@ -95,7 +91,7 @@ public class TurtleWorld extends AbstractWorld{
     private void drawRobot(Position position){
         float robotSize = 2.5f;
         StdDraw.setPenRadius(0.002);
-        StdDraw.setPenColor(Color.BLUE);
+        StdDraw.setPenColor(Color.orange);
         StdDraw.filledSquare(
             position.getX()*scale,
             position.getY()*scale,
@@ -110,7 +106,7 @@ public class TurtleWorld extends AbstractWorld{
 
     private void showPositionUpdate() {
         StdDraw.setPenRadius(0.005);
-        StdDraw.setPenColor(Color.BLUE);
+        StdDraw.setPenColor(Color.orange);
         StdDraw.line(
             prev_x*scale, 
             prev_y*scale,
@@ -122,5 +118,10 @@ public class TurtleWorld extends AbstractWorld{
         prev_y = position.getY();
     }
 
-
+    @Override
+    public void reset() {
+        super.reset();
+        prev_x = CENTRE.getX();
+        prev_y = CENTRE.getY();
+    }
 }

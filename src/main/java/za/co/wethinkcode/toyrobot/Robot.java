@@ -82,9 +82,12 @@ public class Robot {
             + this.name + "> " + this.status.getMessage();
     }
 
-
     public List<Obstacle> getObstacles(){
         return this.world.getObstacles();
+    }
+
+    public void reset(){
+        this.world.reset();
     }
 
 }
