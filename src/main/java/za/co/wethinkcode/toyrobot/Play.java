@@ -7,6 +7,7 @@ import za.co.wethinkcode.toyrobot.maze.DesignedMaze;
 import za.co.wethinkcode.toyrobot.maze.EmptyMaze;
 import za.co.wethinkcode.toyrobot.maze.RandomMaze;
 import za.co.wethinkcode.toyrobot.maze.SimpleMaze;
+
 import za.co.wethinkcode.toyrobot.world.IWorld;
 import za.co.wethinkcode.toyrobot.world.TextWorld;
 import za.co.wethinkcode.toyrobot.world.TurtleWorld;
@@ -18,27 +19,32 @@ public class Play {
         final IWorld world;
 
         // args = new String[]{"designedmaze", "turtle"};
-        args = new String[]{"designedmaze"};
-
 
         Maze maze = new EmptyMaze();
         for (String arg : args){
             switch (arg.toLowerCase()){
+                case "emptymaze":
+                    maze = new EmptyMaze();
+                    System.out.println("Loaded EmptyMaze.");
+                    break;
                 case "simplemaze":
                     maze = new SimpleMaze();
+                    System.out.println("Loaded SimpleMaze.");
                     break;
                 case "randommaze":
                     maze = new RandomMaze();
+                    System.out.println("Loaded RandomMaze.");
                     break;
                 case "designedmaze":
                     maze = new DesignedMaze();
+                    System.out.println("Loaded DesignedMaze.");
                     break;
             }
         }
         
         boolean flag = false;
         for (String arg : args){
-            if (arg.toLowerCase() == "turtle"){
+            if (arg.toLowerCase().matches("turtle")){
                 flag = true;
                 break;
             }
@@ -68,7 +74,8 @@ public class Play {
             }
             System.out.println(robot);
         } while (robot.getStatus() != IWorld.UpdateResponse.SHUTDOWN);
-
+        
+        System.exit(0);
     }
 
     private static String getInput(String prompt) {

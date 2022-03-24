@@ -1,6 +1,7 @@
 package za.co.wethinkcode.toyrobot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class MazerunCommand extends Command implements MazeRunner {
     private HashMap<String,Integer> map;
     private List<Position> path = new ArrayList<Position>();
     private int count = 0;
-    private int size = 1;
+    private int size = 5;
 
 
     public MazerunCommand(){super("mazerun");}
@@ -39,19 +40,17 @@ public class MazerunCommand extends Command implements MazeRunner {
     private void explore(Position currentPosition, int n){
         map.put(currentPosition.toString(), n);
 
-        // System.out.println(map.get(currentPosition.toString()));
-
         for (Direction direction : new  Direction[]{Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT}){
             Position next = new Position(
-                currentPosition.getX()+direction.getX(),
-                currentPosition.getY()+direction.getY()
+                currentPosition.getX()+direction.getX()*size,
+                currentPosition.getY()+direction.getY()*size
             );
 
             if (map.get(next.toString()) == null){
                 return;
             }
 
-            if (map.get(next.toString()) == 0){
+            if (map.get(next.toString()) == 0 || map.get(next.toString()) > n+1){
                 explore(next, n+1);
             }
         }
@@ -62,23 +61,29 @@ public class MazerunCommand extends Command implements MazeRunner {
         Position smallest = goal;
 
         if (goal.getX() == IWorld.CENTRE.getX()){
-            for (int x = IWorld.BOTTOM_LEFT.getX(); x <= IWorld.TOP_RIGHT.getX(); x++){
+            for (int x = IWorld.BOTTOM_LEFT.getX(); x <= IWorld.TOP_RIGHT.getX(); x+=size){
                 Position temp = new Position(x, goal.getY());
 
-                if (map.get(temp.toString())>0 
-                        && (map.get(smallest.toString()) > map.get(temp.toString()) 
-                            || map.get(smallest.toString()) == -1)){
+                int sizeCurrent = map.get(smallest.toString());
+                int sizeNext = map.get(temp.toString());
+
+                if (sizeNext>0){
+                    if (sizeCurrent >= sizeNext || sizeCurrent == -1){
                         smallest = temp;
+                    }
                 }
             }
         } else {
-            for (int y = IWorld.TOP_RIGHT.getY(); y >= IWorld.BOTTOM_LEFT.getY(); y--){
+            for (int y = IWorld.BOTTOM_LEFT.getY(); y <=  IWorld.TOP_RIGHT.getY(); y+=size){
                 Position temp = new Position(goal.getX(), y);                
 
-                if (map.get(temp.toString())>0 
-                    && (map.get(smallest.toString()) > map.get(temp.toString()) 
-                        || map.get(smallest.toString()) == -1)){
-                smallest = temp;
+                int sizeCurrent = map.get(smallest.toString());
+                int sizeNext = map.get(temp.toString());
+
+                if (sizeNext>0){
+                    if (sizeCurrent >= sizeNext || sizeCurrent == -1){
+                        smallest = temp;
+                    }
                 }
             }
         }
@@ -108,31 +113,38 @@ public class MazerunCommand extends Command implements MazeRunner {
 
         for (Direction direction : directions){
             Position next = new Position(
-                currentPosition.getX()+direction.getX(),
-                currentPosition.getY()+direction.getY()
+                currentPosition.getX()+direction.getX()*size,
+                currentPosition.getY()+direction.getY()*size
             );
 
             if (map.get(next.toString()) != null){
                 if (map.get(next.toString()) == map.get(currentPosition.toString()) -1){
-                    if (direction != lastDirection || map.get(next.toString()) == 1){
+                    if (direction != lastDirection){
+                        path.add(currentPosition);
+                    }
+
+                    if(map.get(next.toString()) == 1){
                         path.add(next);
                     }
+
                     backTrace(next, direction);
+
                     break;
                 }
             }
         }
-
     }
 
 
     private void initializeMap(Robot target){
         List<Obstacle> obstacles = target.getObstacles();
         map = new HashMap<String, Integer>();
-        size = obstacles.get(0).getSize();
+        if (obstacles.size() > 0){
+            size = obstacles.get(0).getSize();
+        }
         
-        for (int y = IWorld.BOTTOM_LEFT.getY(); y <=  IWorld.TOP_RIGHT.getY(); y++){
-            for (int x = IWorld.BOTTOM_LEFT.getX(); x <= IWorld.TOP_RIGHT.getX(); x++){
+        for (int y = IWorld.BOTTOM_LEFT.getY(); y <=  IWorld.TOP_RIGHT.getY(); y+=size){
+            for (int x = IWorld.BOTTOM_LEFT.getX(); x <= IWorld.TOP_RIGHT.getX(); x+=size){
                 Position temp = new Position(x, y);
                 
                 for (Obstacle obstacle : obstacles){
@@ -145,6 +157,10 @@ public class MazerunCommand extends Command implements MazeRunner {
                 if (map.get(temp.toString()) == null){
                     map.put(temp.toString(), 0);
                 }
+
+                if (map.get(temp.toString()) > 0){
+                    map.put(temp.toString(), 0);
+                }
             }
         }
     }
@@ -152,6 +168,9 @@ public class MazerunCommand extends Command implements MazeRunner {
 
     @Override
     public boolean mazeRun(Robot target, Direction edgeDirection) {
+        target.setStatus("Starting maze run..");
+        System.out.println(target);
+        
         initializeMap(target);
 
         explore(target.getPosition(), 1);
@@ -162,16 +181,68 @@ public class MazerunCommand extends Command implements MazeRunner {
 
         backTrace(start, Direction.left(Direction.left(edgeDirection)));
         
+        
+        Collections.reverse(path);     
+        
+        if (!path.get(0).equals(target.getPosition())){
+            return false;
+        }
+        
+        path.remove(0);
+        
         count = path.size();
 
-        for (Position p : path){
-            System.out.println(p);
-        }
+        for (Position position : path){
+            int xC = target.getPosition().getX();
+            int yC = target.getPosition().getY();
 
-        for (int i = 0; i < 2; i++){
-            target.handleCommand(new ForwardCommand("100"));
+            int x = position.getX();
+            int y = position.getY();
+
+            int steps = 0;
+
+            Command command;
+            
+            Direction direction = Direction.UP;
+
+            if (xC == x){
+                if (yC > y){
+                    direction = Direction.DOWN;
+                    steps = yC - y;
+                } else {
+                    direction = Direction.UP;
+                    steps = y - yC;
+                }
+            } else {
+                if (xC > x){
+                    direction = Direction.LEFT;
+                    steps = xC - x;
+                } else {
+                    direction = Direction.RIGHT;
+                    steps = x - xC;
+                }
+            }
+            
+            while (target.getCurrentDirection() != direction){
+                command = new LeftCommand();
+                target.handleCommand(command);
+                System.out.println(target);
+            }
+
+            while (steps > 100){
+                command = new ForwardCommand(Integer.toString(100));
+                target.handleCommand(command);
+                System.out.println(target);
+                steps -= 100;
+                count++;
+            }
+
+            command = new ForwardCommand(Integer.toString(steps));
+            target.handleCommand(command);
             System.out.println(target);
         }
+
+        map.clear();
 
         return true;
     }
@@ -188,19 +259,25 @@ public class MazerunCommand extends Command implements MazeRunner {
     @Override
     public boolean execute(Robot target){
         Direction edge;
+
         switch (this.getArgument().toLowerCase()){
             case "right" :
                 edge = Direction.RIGHT;
                 break;
-            case "down" :
+            case "bottom" :
                 edge = Direction.DOWN;
                 break;
             case "left" :
                 edge = Direction.LEFT;
                 break;
-            default:
-                edge  = Direction.UP;
+            case "top" :
+                edge = Direction.UP;
                 break;
+            case "" :
+                edge = Direction.UP;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported command.");
         }
 
         if (mazeRun(target, edge)){
@@ -211,6 +288,7 @@ public class MazerunCommand extends Command implements MazeRunner {
         } else {
             target.setStatus(UpdateResponse.FAILED_NO_SOLUTION);
         }
+
         return true;
     }
 
