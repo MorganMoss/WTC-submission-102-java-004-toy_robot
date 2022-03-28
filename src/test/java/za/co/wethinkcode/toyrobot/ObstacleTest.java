@@ -16,7 +16,7 @@ public class ObstacleTest {
         assertEquals(-200, ob.getBottomLeftY());
         assertEquals(100, ob.getTopRightX());
         assertEquals(200, ob.getTopRightY());
-        assertEquals(0, ob.getSize());
+        assertEquals(200, ob.getSize());
         assertEquals( "- At position -100,-200 (to 100,200)", ob.toString());
     }
 
