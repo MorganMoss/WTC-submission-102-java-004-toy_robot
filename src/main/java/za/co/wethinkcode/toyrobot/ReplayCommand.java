@@ -29,6 +29,30 @@ public class ReplayCommand extends Command{
     public ReplayCommand(String args){super("replay", args);}
 
     /**
+     * This will replay commands according to the 
+     * history of the target and the input given
+     */
+    @Override
+    public boolean execute(Robot target) {
+        final List<Integer> range = this.getRange(target);
+        final int low = range.get(0);
+        final int high = range.get(1);
+        final List<Command> commands = new ArrayList<Command>(target.getHistory().subList(low, high));
+
+        if (this.getArgument().matches("(.*)(reversed(?i))(.*)")){
+            Collections.reverse(commands);
+        }
+        
+        replayCommands(commands, target);
+
+        UpdateResponse r = UpdateResponse.SUCCESS;
+        r.setMessage("replayed "+commands.size()+" commands.");
+        target.setStatus(r);
+        
+        return true;
+    }
+    
+    /**
      * Takes a list of commands and executes them on a target
      * @param commands : The list of commands
      * @param target : The robot that will execute these commands
@@ -38,7 +62,7 @@ public class ReplayCommand extends Command{
         for (Command command : commands){
             target.handleCommand(command);
             target.popHistory();
-            System.out.println(target);
+            Play.print(target.toString());
         }
     }
 
@@ -79,30 +103,4 @@ public class ReplayCommand extends Command{
 
         return range;
     }
-
-
-    /**
-     * This will replay commands according to the 
-     * history of the target and the input given
-     */
-    @Override
-    public boolean execute(Robot target) {
-        final List<Integer> range = this.getRange(target);
-        final int low = range.get(0);
-        final int high = range.get(1);
-        final List<Command> commands = new ArrayList<Command>(target.getHistory().subList(low, high));
-
-        if (this.getArgument().matches("(.*)(reversed(?i))(.*)")){
-            Collections.reverse(commands);
-        }
-        
-        replayCommands(commands, target);
-
-        UpdateResponse r = UpdateResponse.SUCCESS;
-        r.setMessage("replayed "+commands.size()+" commands.");
-        target.setStatus(r);
-        
-        return true;
-    }
-
 }

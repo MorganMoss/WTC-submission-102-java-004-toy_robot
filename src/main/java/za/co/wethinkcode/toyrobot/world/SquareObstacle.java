@@ -1,11 +1,24 @@
 package za.co.wethinkcode.toyrobot.world;
 
+/**
+ * SquareObstacle class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
+
 import za.co.wethinkcode.toyrobot.Position;
 
+/**
+ * A child class of the RectangleObstacle. 
+ * Makes an obstacle with 2 right angled corners of equal width and height
+ */
 public class SquareObstacle extends RectangleObstacle{
     protected static int DEFAULT_SIZE = 5;
 
     protected final int size;
+
 
     public SquareObstacle(int x, int y) {
         super(
@@ -35,9 +48,9 @@ public class SquareObstacle extends RectangleObstacle{
         this.size = size;
     }
 
+
     @Override
-    public int getSize() { return size; }
-
-
-
+    public int getSize() { 
+        return size; 
+    }
 }

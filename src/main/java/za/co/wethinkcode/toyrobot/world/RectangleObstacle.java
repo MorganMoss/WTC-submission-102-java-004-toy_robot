@@ -1,10 +1,23 @@
 package za.co.wethinkcode.toyrobot.world;
 
+/**
+ * RectangleObstacle class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
+
 import za.co.wethinkcode.toyrobot.Position;
 
+/**
+ * An implementation of the Obstacle interface. 
+ * Makes an obstacle with 2 right angled corners of varied width and height
+ */
 public class RectangleObstacle implements Obstacle{
     protected Position bottomLeftPosition;
     protected Position topRightPosition;
+
 
     public RectangleObstacle(Position bottomLeftPosition, Position topRightPosition){
         this.bottomLeftPosition = bottomLeftPosition;
@@ -14,7 +27,27 @@ public class RectangleObstacle implements Obstacle{
     
     @Override
     public int getSize() {
-        return 0;
+        return topRightPosition.getX() - bottomLeftPosition.getX();
+    }
+
+    @Override
+    public int getBottomLeftX() {
+        return bottomLeftPosition.getX();
+    }
+
+    @Override
+    public int getBottomLeftY() {
+        return bottomLeftPosition.getY();
+    }
+
+    @Override
+    public int getTopRightX() {
+        return topRightPosition.getX();
+    }
+
+    @Override
+    public int getTopRightY() {
+        return topRightPosition.getY();
     }
 
 
@@ -45,34 +78,9 @@ public class RectangleObstacle implements Obstacle{
         return false;
     }
 
+
     @Override
     public String toString(){
         return "- At position " + bottomLeftPosition.toString() + " (to " + topRightPosition.toString() + ")";
     }
-
-
-    @Override
-    public int getBottomLeftX() {
-        return bottomLeftPosition.getX();
-    }
-
-
-    @Override
-    public int getBottomLeftY() {
-        return bottomLeftPosition.getY();
-    }
-
-
-    @Override
-    public int getTopRightX() {
-        return topRightPosition.getX();
-    }
-
-
-    @Override
-    public int getTopRightY() {
-        return topRightPosition.getY();
-    }
-
-
 }

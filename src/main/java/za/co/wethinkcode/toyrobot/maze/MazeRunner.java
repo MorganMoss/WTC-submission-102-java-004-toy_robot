@@ -4,7 +4,8 @@ import za.co.wethinkcode.toyrobot.Robot;
 import za.co.wethinkcode.toyrobot.world.IWorld;
 
 /**
- * Interface to represent a maze runner. It will solve a maze loaded into a world.
+ * Interface to represent a maze runner.
+ * It will solve a maze loaded into a world.
  */
 public interface MazeRunner {
     /**

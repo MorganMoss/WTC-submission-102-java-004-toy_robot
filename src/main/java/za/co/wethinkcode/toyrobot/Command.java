@@ -47,11 +47,20 @@ public abstract class Command {
             case "help":
                 return new HelpCommand();
             case "forward":
-                return new ForwardCommand(args[1]);
+                if (args.length > 1){
+                    return new ForwardCommand(args[1]);                    
+                }
+                throw new IllegalArgumentException("Unsupported command: " + instruction);
             case "back":
-                return new BackCommand(args[1]);
+                if (args.length > 1){
+                    return new BackCommand(args[1]);                    
+                }
+                throw new IllegalArgumentException("Unsupported command: " + instruction);
             case "sprint":
-                return new SprintCommand(args[1]);
+                if (args.length > 1){
+                    return new SprintCommand(args[1]);                    
+                }
+                throw new IllegalArgumentException("Unsupported command: " + instruction);
             case "left":
                 return new LeftCommand();
             case "right":

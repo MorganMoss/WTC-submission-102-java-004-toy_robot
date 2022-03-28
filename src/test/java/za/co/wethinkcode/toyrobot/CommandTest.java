@@ -76,10 +76,7 @@ class CommandTest {
         Robot robot = new Robot("CrashTestDummy", new TextWorld(new EmptyMaze()));
         Command help = Command.create("help");
         assertTrue(help.execute(robot));
-        assertEquals("I can understand these commands:\n" +
-                "OFF  - Shut down robot\n" +
-                "HELP - provide information about commands\n" +
-                "FORWARD - move forward by specified number of steps, e.g. 'FORWARD 10'", robot.getStatus().getMessage());
+        assertEquals(IWorld.UpdateResponse.HELP.getMessage(), robot.getStatus().getMessage());
     }
 
     

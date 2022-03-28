@@ -1,5 +1,13 @@
 package za.co.wethinkcode.toyrobot;
 
+/**
+ * Play class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
+
 import java.util.Scanner;
 
 import za.co.wethinkcode.toyrobot.maze.Maze;
@@ -12,14 +20,24 @@ import za.co.wethinkcode.toyrobot.world.IWorld;
 import za.co.wethinkcode.toyrobot.world.TextWorld;
 import za.co.wethinkcode.toyrobot.world.TurtleWorld;
 
+/**
+ * The program is run from this class. It handles input and output.
+ */
 public class Play {
     static Scanner scanner;
-
+    
+    /**
+     * Program run from here. 
+     * Makes a maze that is given to a world that is given to a robot
+     * That robot will then take commands as input.
+     * @param args : The command line arguments.
+     * It allows you to specify what maze and world you wish to use.
+     */
     public static void main(String[] args) {
         final IWorld world;
 
         // args = new String[]{"designedmaze", "turtle"};
-
+        
         Maze maze = new EmptyMaze();
         for (String arg : args){
             switch (arg.toLowerCase()){
@@ -28,7 +46,7 @@ public class Play {
                     System.out.println("Loaded EmptyMaze.");
                     break;
                 case "simplemaze":
-                    maze = new SimpleMaze();
+                maze = new SimpleMaze();
                     System.out.println("Loaded SimpleMaze.");
                     break;
                 case "randommaze":
@@ -49,7 +67,7 @@ public class Play {
                 break;
             }
         }
-
+        
         if (!flag){
             world = new TextWorld(maze);
         } else {
@@ -61,7 +79,7 @@ public class Play {
         robot = new Robot(name, world);
         System.out.println("Hello Kiddo!");
 
-        System.out.println(robot.toString());
+        print(robot.toString());
 
         Command command;
         do {
@@ -72,12 +90,19 @@ public class Play {
             } catch (IllegalArgumentException e) {
                 robot.setStatus("Sorry, I did not understand '" + instruction + "'.");
             }
-            System.out.println(robot);
+            print(robot.toString());
         } while (robot.getStatus() != IWorld.UpdateResponse.SHUTDOWN);
         
-        // System.exit(0);
+        if (flag){
+            System.exit(0);
+        }
     }
 
+    /**
+     * This will prompt the user with given message, and then get input
+     * @param prompt : the message the user will be prompted with
+     * @return The user's non-empty input
+     */
     private static String getInput(String prompt) {
         System.out.println(prompt);
         String input = scanner.nextLine();
@@ -87,5 +112,13 @@ public class Play {
             input = scanner.nextLine();
         }
         return input;
+    }
+    
+    /**
+     * Will print out a given message to console
+     * @param message : The message to be printed to console
+     */
+    public static void print(String message){
+        System.out.println(message);
     }
 }

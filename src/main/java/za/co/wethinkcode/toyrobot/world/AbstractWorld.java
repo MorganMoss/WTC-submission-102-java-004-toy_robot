@@ -1,10 +1,21 @@
 package za.co.wethinkcode.toyrobot.world;
 
+/**
+ * AbstractWorld class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
+
 import java.util.List;
 
 import za.co.wethinkcode.toyrobot.maze.Maze;
 import za.co.wethinkcode.toyrobot.Position;
 
+/**
+ * An abstract implementation of the IWorld interface. 
+ */
 public abstract class AbstractWorld implements IWorld {
     private final Maze maze;
     
@@ -28,6 +39,9 @@ public abstract class AbstractWorld implements IWorld {
     }
     
     @Override
+    public abstract void showObstacles();
+
+    @Override
     public Position getPosition() {
         return position;
     }
@@ -40,6 +54,7 @@ public abstract class AbstractWorld implements IWorld {
     public UpdateResponse getStatus() {
         return status;
     }
+
 
     @Override
     public boolean isAtEdge() {
@@ -69,7 +84,6 @@ public abstract class AbstractWorld implements IWorld {
         status = UpdateResponse.SUCCESS;
         return true;
     }
-    
     
     @Override
     public UpdateResponse updatePosition(int nrSteps) {
@@ -108,8 +122,5 @@ public abstract class AbstractWorld implements IWorld {
         direction = Direction.UP;
         if (this.obstacles.size() > 0) this.showObstacles();
     }
-    
-    @Override
-    public abstract void showObstacles();
 }
 

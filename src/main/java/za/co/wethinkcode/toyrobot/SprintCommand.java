@@ -1,7 +1,5 @@
 package za.co.wethinkcode.toyrobot;
 
-import za.co.wethinkcode.toyrobot.world.IWorld.UpdateResponse;
-
 /**
  * SprintCommand class source code
  * 
@@ -9,6 +7,8 @@ import za.co.wethinkcode.toyrobot.world.IWorld.UpdateResponse;
  * @version 1.0
  * 
  */
+
+import za.co.wethinkcode.toyrobot.world.IWorld.UpdateResponse;
 
 /**
  * A command that will make a robot sprint
@@ -34,7 +34,7 @@ public class SprintCommand extends Command {
                 if (target.getStatus() != UpdateResponse.SUCCESS){
                     break;
                 }
-                if (i > 1) System.out.println(target);
+                if (i > 1) Play.print(target.toString());
             }
         } else {
             throw new IllegalArgumentException("Please enter an integer for steps.");

@@ -1,12 +1,28 @@
 package za.co.wethinkcode.toyrobot.maze;
 
+/**
+ * DesignedMaze class source code
+ * 
+ * @author Morgan Moss
+ * @version 1.0
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.List;
 
 import za.co.wethinkcode.toyrobot.world.Obstacle;
 import za.co.wethinkcode.toyrobot.world.SquareObstacle;
 
+/**
+ * An implementation of the Maze interface. 
+ * A World will be loaded with a Maze's obstacles. 
+ * This will create a structured maze.
+ */
 public class DesignedMaze implements Maze {
+/**
+ * The basic maze string, can be used to generate an easy maze. 
+ */
 private static String basicMaze = 
         "XXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXX\n"
     +   "XXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXX\n"
@@ -90,7 +106,9 @@ private static String basicMaze =
     +   "XXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXX\n"
     +   "XXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXX\n"
 ;
-
+/**
+ * The real maze string, can be used to generate a proper maze. 
+ */
 private static String realMaze = 
         "XXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXX\n"
     +   "X     X     X X   X X   X     X X   X   X\n"
@@ -176,9 +194,6 @@ private static String realMaze =
 ;
 
 
-
-    
-
     @Override
     public List<Obstacle> getObstacles() {
         String maze = DesignedMaze.realMaze;
@@ -201,5 +216,4 @@ private static String realMaze =
 
         return list;
     }
-
 }
