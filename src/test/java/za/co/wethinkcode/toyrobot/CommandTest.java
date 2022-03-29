@@ -174,4 +174,45 @@ class CommandTest {
         assertEquals(expectedPosition, robot.getPosition());
         assertEquals("replayed 6 commands.", robot.getStatus().getMessage());
     }
+
+
+    @Test
+    void getMazerunName() {
+        Command test = new MazerunCommand("");
+        assertEquals("mazerun", test.getName());
+        assertEquals("", test.getArgument());
+    }
+    @Test
+    void executeMazerun() {
+        Robot robot = new Robot("CrashTestDummy", new TextWorld(new EmptyMaze()));
+        Command replay = Command.create("mazerun bottom");
+        assertTrue(replay.execute(robot));
+
+        Position expectedPosition = new Position(
+            IWorld.CENTRE.getX(),
+            IWorld.CENTRE.getY() - 200
+        );
+        assertEquals(expectedPosition, robot.getPosition());
+        assertEquals("I am at the down edge. (Cost: 2 steps)", robot.getStatus().getMessage());
+
+        replay = Command.create("mazerun left");
+        assertTrue(replay.execute(robot));
+
+        expectedPosition = new Position(
+            IWorld.CENTRE.getX()-100,
+            IWorld.CENTRE.getY()
+        );
+        assertEquals(expectedPosition, robot.getPosition());
+        assertEquals("I am at the left edge. (Cost: 1 steps)", robot.getStatus().getMessage());
+
+        replay = Command.create("mazerun right");
+        assertTrue(replay.execute(robot));
+
+        expectedPosition = new Position(
+            IWorld.CENTRE.getX()+100,
+            IWorld.CENTRE.getY()
+        );
+        assertEquals(expectedPosition, robot.getPosition());
+        assertEquals("I am at the right edge. (Cost: 1 steps)", robot.getStatus().getMessage());
+    }
 }
